@@ -1,0 +1,27 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+  name: microservices-demo-dev
+  namespace: openshift-gitops
+spec:
+  destination:
+    name: ''
+    namespace: ms-demo
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: kubernetes-manifests
+# we specify the folder for the files
+    repoURL: 'https://github.com/mostmark/microservices-demo.git'
+# the repository url
+    targetRevision: HEAD
+# and branch, in this case HEAD / main
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - PruneLast=true
